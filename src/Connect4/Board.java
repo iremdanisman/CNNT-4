@@ -226,4 +226,5 @@ public class Board {
     public void setTotalMovesPlayed(int totalMovesPlayed) {
         this.totalMovesPlayed = totalMovesPlayed;
     }
+    
 }
