@@ -89,7 +89,10 @@ class ButtonListener implements ActionListener {
             if (board.hasWinningCondition() == false) {
                 if (board.getTotalMovesPlayed() != board.getNumColumns() * board.getNumRows()) {
                     view.getPlayerTurnLabel().setText("Current Player is: " + board.getCurrentPlayer());
-                } 
+                } else {
+                    JOptionPane.showMessageDialog(null, "No Winner!!");
+                    clearBoard();
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "The Winner is " + currentPlayer);
                 clearBoard();
@@ -180,5 +183,6 @@ class ResetButtonListener implements ActionListener {
         button.setBackground(Color.BLACK);
         button.setOpaque(true);
     }
+
 }
 
