@@ -16,12 +16,9 @@ public class View extends JPanel {
 
     public View(Board board) {
         this.board = board;
-
         buttons = new JButton[board.getNumRows()][board.getNumColumns()];
         createButtons();
-
         playerTurnLabel = new JLabel("Current Player is: " + board.getCurrentPlayer());
-
         createMainScreen();
     }
 
@@ -39,16 +36,19 @@ public class View extends JPanel {
     }
 
     public void createRulesScreen() {
+        updatePanel();
         setLayout(new BorderLayout());
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.add(startButton);
         ImageIcon image = new ImageIcon("rules.png");
         JLabel test = new JLabel(image);
+
         add(test);
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
     public void createGameScreen() {
+        updatePanel();
         setLayout(new BorderLayout());
         JPanel center = new JPanel(new GridLayout(board.getNumRows(), board.getNumColumns()));
         add(center);
@@ -56,7 +56,6 @@ public class View extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
         buttonPanel.add(playerTurnLabel);
         addButtonsToGameScreen(center);
-
         buttonPanel.add(resetButton);
     }
 
@@ -80,6 +79,12 @@ public class View extends JPanel {
         button.setBackground(Color.BLACK);
         button.setOpaque(true);
         return button;
+    }
+
+    private void updatePanel() {
+        removeAll();
+        revalidate();
+        repaint();
     }
 
     public JButton getStartButton() {
