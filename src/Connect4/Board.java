@@ -28,21 +28,6 @@ public class Board {
         initializeEmptyBoard();
     }
 
-    public void initializeEmptyBoard() {
-        chips = new Chip[NUM_ROWS][NUM_COLUMNS];
-        values = new int[NUM_ROWS][NUM_COLUMNS];
-
-        totalMovesPlayed = 0;
-        config = "";
-
-        for (int i = 0; i < NUM_ROWS; i++) {
-            for (int j = 0; j < NUM_COLUMNS; j++) {
-                chips[i][j] = Chip.NONE;
-                values[i][j] = 0; // 0 means '_' 1 means RedChip 2 means YellowChip
-            }
-        }
-    }
-
     public Board(String configuration) {
         this();
         for (int i = 0; i < configuration.length(); i++) {
@@ -53,6 +38,7 @@ public class Board {
     }
 
     public void insertChipAt(int column) {
+        // Column must be between 1 and 7
         boolean inserted = false;
         if (column < 1 || column > NUM_COLUMNS) {
             throw new IllegalArgumentException("Enter valid Column ");
@@ -91,10 +77,10 @@ public class Board {
     private boolean hasWinningConditionOnColumns() {
         for (int j = 0; j < NUM_COLUMNS; j++) {
             for (int i = 0; i < NUM_ROWS / 2; i++) {
-                if (getChip(values, i, j) != Chip.NONE) {
-                    if (getChip(values, i, j) == getChip(values, i + 1, j)
-                            && getChip(values, i, j) == getChip(values, i + 2, j)
-                            && getChip(values, i, j) == getChip(values, i + 3, j)) {
+                if (getChip(i, j) != Chip.NONE) {
+                    if (getChip(i, j) == getChip(i + 1, j)
+                            && getChip(i, j) == getChip(i + 2, j)
+                            && getChip(i, j) == getChip(i + 3, j)) {
                         return true;
                     }
                 }
@@ -106,10 +92,10 @@ public class Board {
     private boolean hasWinningConditionOnRows() {
         for (int i = 0; i < NUM_ROWS; i++) {
             for (int j = 0; j <= NUM_COLUMNS / 2; j++) {
-                if (getChip(values, i, j) != Chip.NONE) {
-                    if (getChip(values, i, j) == getChip(values, i, j + 1)
-                            && getChip(values, i, j) == getChip(values, i, j + 2)
-                            && getChip(values, i, j) == getChip(values, i, j + 3)) {
+                if (getChip(i, j) != Chip.NONE) {
+                    if (getChip(i, j) == getChip(i, j + 1)
+                            && getChip(i, j) == getChip(i, j + 2)
+                            && getChip(i, j) == getChip(i, j + 3)) {
                         return true;
                     }
                 }
@@ -122,10 +108,10 @@ public class Board {
         // to right diagonal
         for (int i = NUM_ROWS / 2; i < NUM_ROWS; i++) {
             for (int j = 0; j <= NUM_COLUMNS / 2; j++) {
-                if (getChip(values, i, j) != Chip.NONE) {
-                    if (getChip(values, i, j) == getChip(values, i - 1, j + 1)
-                            && getChip(values, i, j) == getChip(values, i - 2, j + 2)
-                            && getChip(values, i, j) == getChip(values, i - 3, j + 3)) {
+                if (getChip(i, j) != Chip.NONE) {
+                    if (getChip(i, j) == getChip(i - 1, j + 1)
+                            && getChip(i, j) == getChip(i - 2, j + 2)
+                            && getChip(i, j) == getChip(i - 3, j + 3)) {
                         return true;
                     }
                 }
@@ -135,10 +121,10 @@ public class Board {
         // to left diagonal
         for (int i = NUM_ROWS / 2; i < NUM_ROWS; i++) {
             for (int j = NUM_COLUMNS / 2; j < NUM_COLUMNS; j++) {
-                if (getChip(values, i, j) != Chip.NONE) {
-                    if (getChip(values, i, j) == getChip(values, i - 1, j - 1)
-                            && getChip(values, i, j) == getChip(values, i - 2, j - 2)
-                            && getChip(values, i, j) == getChip(values, i - 3, j - 3)) {
+                if (getChip(i, j) != Chip.NONE) {
+                    if (getChip(i, j) == getChip(i - 1, j - 1)
+                            && getChip(i, j) == getChip(i - 2, j - 2)
+                            && getChip(i, j) == getChip(i - 3, j - 3)) {
                         return true;
                     }
                 }
@@ -151,7 +137,29 @@ public class Board {
         return hasWinningConditionOnRows() || hasWinningConditionOnColumns() || hasWinningConditionOnDiagonals();
     }
 
-    public Chip getChip(int[][] values, int row, int column) {
+    public void clearChipArray() {
+        for (int i = 0; i < NUM_ROWS; i++) {
+            for (int j = 0; j < NUM_COLUMNS; j++)
+                chips[i][j] = Chip.NONE;
+        }
+    }
+
+    public void initializeEmptyBoard() {
+        chips = new Chip[NUM_ROWS][NUM_COLUMNS];
+        values = new int[NUM_ROWS][NUM_COLUMNS];
+
+        totalMovesPlayed = 0;
+        config = "";
+
+        for (int i = 0; i < NUM_ROWS; i++) {
+            for (int j = 0; j < NUM_COLUMNS; j++) {
+                chips[i][j] = Chip.NONE;
+                values[i][j] = 0; // 0 means '_' 1 means RedChip 2 means YellowChip
+            }
+        }
+    }
+
+    public Chip getChip(int row, int column) {
         if (values[row][column] == 0) {
             return Chip.NONE;
         } else if (values[row][column] == 1) {
@@ -160,13 +168,6 @@ public class Board {
             return Chip.YELLOW;
         }
         return null;
-    }
-
-    public void clearChipArray() {
-        for (int i = 0; i < NUM_ROWS; i++) {
-            for (int j = 0; j < NUM_COLUMNS; j++)
-                chips[i][j] = Chip.NONE;
-        }
     }
 
     public String getConfiguration() {
@@ -189,10 +190,6 @@ public class Board {
 
     public int getTotalMovesPlayed() {
         return totalMovesPlayed;
-    }
-
-    public String getConfig() {
-        return config;
     }
 
     public int[][] getValues() {
@@ -226,5 +223,4 @@ public class Board {
     public void setTotalMovesPlayed(int totalMovesPlayed) {
         this.totalMovesPlayed = totalMovesPlayed;
     }
-    
 }
